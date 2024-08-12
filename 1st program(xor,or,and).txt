@@ -1,0 +1,170 @@
+1st program(xor,or,and)
+
+#include <stdio.h>
+int main() {
+char str[] = "Hello World";
+printf("Original string: %s\n\n", str);
+printf("AND: ");
+for (int i = 0; str[i]; i++)
+printf("%c", str[i] & 127);
+printf("\nOR: ");
+for (int i = 0; str[i]; i++) 
+printf("%c", str[i] | 127);
+printf("\nXOR: ");
+for (int i = 0; str[i]; i++)
+printf("%c", str[i] ^ 127);
+printf("\n");
+return 0;
+}
+
+4th program (hill cipher)
+
+#include <stdio.h>
+#include <string.h>
+int main()
+{
+unsigned int a[3][3] = {{6,24,1}, {13,16,10}, {20,17,15}};
+unsigned int b[3][3] = {{8,5,10}, {21,8,21}, {21,12,8}};
+int i,j;
+unsigned int c[20],d[20];
+char msg[20];
+int determinant = 0,t=0;
+printf("Enter the plaintext: \n");
+scanf("%s", msg);
+for(i=0;i<3;i++){
+c[i] = msg[i] - 65;
+printf("%d", c[i]);
+}
+for(i=0;i<3;i++){
+t=0;
+for(j=0;j<3;j++){
+t= t + (a[i][j]*c[j]);
+}
+d[i] = t%26;
+}
+printf("\nencrypted cipher text: ");
+for(i=0;i<3;i++)
+printf("%c",d[i] + 65);
+for(i=0;i<3;i++){
+t=0;
+for(j=0;j<3;j++){
+t = t + (b[i][j]*d[j]);
+}
+c[i] = t%26;
+}
+printf("\ndecrypted cipher text: ");
+for(i=0;i<3;i++)
+{
+printf("%c", c[i]+65);
+}
+return 0;
+}
+
+5th program(DES)
+
+#include <stdio.h>
+
+int IP[] = {2, 6, 3, 1, 4, 8, 5, 7};
+int IP_inverse[] = {4, 1, 3, 5, 7, 2, 8, 6};
+int S0[4][4] = {{1, 0, 3, 2}, {3, 2, 1, 0}, {0, 2, 1, 3}, {3, 1, 3, 2}};
+
+int permute(int value, int permutation[]) {
+    int result = 0;
+    for (int i = 0; i < 8; i++)
+        result |= ((value >> (8 - permutation[i])) & 1) << (7 - i);
+    return result;
+}
+
+int s_box_sub(int value, int s_box[4][4]) {
+    int row = ((value & 0b1000) >> 2) | (value & 0b0001);
+    int col = (value & 0b0110) >> 1;
+    return s_box[row][col];
+}
+
+int main() {
+    int plaintext = 0b11010110;
+    printf("Plain Text: %x\n", plaintext);
+
+    int cipher_text = permute(plaintext, IP);
+    printf("Cipher Text: %x\n", cipher_text);
+
+    int s_box_result = s_box_sub(0b1101, S0);
+    printf("S-box result: %x\n", s_box_result);
+
+    int decrypted_text = permute(cipher_text, IP_inverse);
+    printf("Decrypted Text: %x\n", decrypted_text);
+
+    return 0;
+}
+
+6th program(AES)
+
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
+import java.util.Base64;
+import java.util.Scanner;
+
+public class pc2 {
+    public static void main(String[] args) throws Exception {
+        SecretKey key = KeyGenerator.getInstance("AES").generateKey();
+        Cipher cipher = Cipher.getInstance("AES");
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter text to encrypt: ");
+        String plainText = scanner.nextLine();
+
+        cipher.init(Cipher.ENCRYPT_MODE, key);
+        String encrypted = Base64.getEncoder().encodeToString(cipher.doFinal(plainText.getBytes()));
+
+        cipher.init(Cipher.DECRYPT_MODE, key);
+        String decrypted = new String(cipher.doFinal(Base64.getDecoder().decode(encrypted)));
+
+        System.out.println("Encrypted: " + encrypted);
+        System.out.println("Decrypted: " + decrypted);
+
+        scanner.close();
+    }
+}
+
+9th program(SHA-512)
+
+import java.security.MessageDigest;
+import java.util.Scanner;
+
+public class pc14 {
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter text to hash: ");
+        byte[] hash = MessageDigest.getInstance("SHA-512").digest(scanner.nextLine().getBytes());
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) hexString.append(String.format("%02x", b));
+
+        System.out.println("SHA-512 hash: " + hexString);
+        scanner.close();
+    }
+}
+
+10th program(MD5)
+
+import java.security.MessageDigest;
+import java.util.Scanner;
+
+public class pc14 {
+    public static void main(String[] args) throws Exception {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.print("Enter text to hash: ");
+        byte[] hash = MessageDigest.getInstance("MD5").digest(scanner.nextLine().getBytes());
+
+        StringBuilder hexString = new StringBuilder();
+        for (byte b : hash) hexString.append(String.format("%02x", b));
+
+        System.out.println("MD5 hash: " + hexString);
+        scanner.close();
+    }
+}
+
+
