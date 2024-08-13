@@ -167,4 +167,226 @@ public class pc14 {
     }
 }
 
+caeser cipher
 
+import java.util.*;
+class ccipher
+{
+    static String encrypt(String s,int key)
+    {
+        String ans="";
+        for(int i=0;i<s.length();i++)
+        {
+            char c=s.charAt(i),add='.';
+            if(Character.isUpperCase(c))add=(char)('A'+(c-'A' +key)%26);
+            else if(Character.isLowerCase(c))add=(char)('a'+(c-'a' +key)%26);
+            else
+            add=c;
+            ans+=add;
+        }
+    return ans;
+    }
+    static String decrypt(String s,int key)
+    {
+        return encrypt(s,26-key);
+    }
+    public static void main(String args[])
+    {
+        Scanner sc=new Scanner(System.in);
+        System.out.println("Enter text to encrypt: ");
+        String plainText=sc.nextLine();
+        System.out.println("Enter shift value: ");
+        int shift=sc.nextInt();
+        System.out.println("Original text is "+plainText);
+        String encrypted=encrypt(plainText,shift);
+        System.out.println("Encrypted Text is "+encrypted);
+        System.out.println("Decrypted Text is "+decrypt(encrypted,shift));
+    }
+}
+
+
+RSA program
+
+import java.math.BigInteger;
+import java.util.Scanner;
+
+public class RSA {
+    public static void main(String args[]) {
+        Scanner scanner = new Scanner(System.in);
+
+        System.out.println("Enter the message to be encrypted:");
+        BigInteger msg = scanner.nextBigInteger();
+
+        System.out.println("Enter the first prime number (p):");
+        BigInteger p = scanner.nextBigInteger();
+
+        System.out.println("Enter the second prime number (q):");
+        BigInteger q = scanner.nextBigInteger();
+
+        BigInteger n = p.multiply(q);
+        BigInteger z = p.subtract(BigInteger.ONE).multiply(q.subtract(BigInteger.ONE));
+        System.out.println("the value of z = " + z);
+
+        BigInteger d = BigInteger.valueOf(2);
+        while (d.compareTo(z) < 0) {
+            if (gcd(d, z).equals(BigInteger.ONE)) {
+                break;
+            }
+            d = d.add(BigInteger.ONE);
+        }
+        System.out.println("the value of d = " + d);
+
+        BigInteger e = BigInteger.ZERO;
+        for (int i = 0; i <= 9; i++) {
+            BigInteger x = BigInteger.ONE.add(BigInteger.valueOf(i).multiply(z));
+            if (x.mod(d).equals(BigInteger.ZERO)) {
+                e = x.divide(d);
+                break;
+            }
+        }
+        System.out.println("the value of e = " + e);
+
+        BigInteger c = msg.modPow(e, n);
+        System.out.println("Encrypted message is : " + c);
+
+        BigInteger msgBack = c.modPow(d, n);
+        System.out.println("Decrypted message is : " + msgBack);
+
+        scanner.close();
+    }
+
+    static BigInteger gcd(BigInteger e, BigInteger z) {
+        if (e.equals(BigInteger.ZERO))
+            return z;
+        else
+            return gcd(z.mod(e), e);
+    }
+}
+
+diffie-hellman
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diffie-Hellman Key Exchange</title>
+</head>
+<body>
+    <h2>Diffie-Hellman Key Exchange</h2>
+    <input type="text" id="p" placeholder="Prime Number (p)">
+    <input type="text" id="g" placeholder="Primitive Root (g)">
+    <input type="text" id="privateA" placeholder="Private Key A (a)">
+    <input type="text" id="privateB" placeholder="Private Key B (b)">
+    <button onclick="calculate()">Calculate</button>
+    <p>Public Key A (A): <span id="publicA"></span></p>
+    <p>Public Key B (B): <span id="publicB"></span></p>
+    <p>Shared Secret: <span id="sharedSecret"></span></p>
+
+    <script>
+        function calculate() {
+            var p = parseInt(document.getElementById("p").value);
+            var g = parseInt(document.getElementById("g").value);
+            var privateA = parseInt(document.getElementById("privateA").value);
+            var privateB = parseInt(document.getElementById("privateB").value);
+
+            var publicA = Math.pow(g, privateA) % p;
+            var publicB = Math.pow(g, privateB) % p;
+            var sharedSecret = Math.pow(publicB, privateA) % p;
+
+            document.getElementById("publicA").innerText = publicA;
+            document.getElementById("publicB").innerText = publicB;
+            document.getElementById("sharedSecret").innerText = sharedSecret;
+        }
+    </script>
+</body>
+</html>  
+
+a) VIGENERE CIPHER:
+
+#include <stdio.h>
+#include <ctype.h>
+#include <stdlib.h>
+#include <string.h>
+void printVigenereTable()
+{
+printf("Vigenere Table ");
+printf("A B C D E F G H I J K L M N O P Q R S T U V W X Y Z \n");
+for(int i = 0; i < 26; i++){
+printf("%c", 'A' + i);
+for(int j = 0; j < 26; j++){
+printf("%c", 'A' + (i + j) % 26);
+}
+printf("\n");
+}
+}
+void encrypt()
+{
+char plaintext[128];
+char key[16];
+printf("Enter the plain text: ");
+scanf(" %[^\n]", plaintext);
+getchar();
+printf("Enter the key: ");
+scanf(" %[^\n]", key);
+getchar();
+printf("Cipher text is: ");
+for(int i = 0, j = 0; i < strlen(plaintext); i++, j++){
+if(j >= strlen(key)){
+j = 0;
+}
+int shift = toupper(key[j]) - 'A';
+char encryptChar = ((toupper(plaintext[i]) - 'A' + shift) % 26) + 'A';
+printf("%c", encryptChar);
+}
+printf("\n");
+}
+void decrypt()
+{
+char ciphertext[128];
+char key[16];
+printf("Enter the chipher text; ");
+scanf(" %[^\n]", ciphertext);
+getchar();
+printf("Enter the key: ");
+scanf(" %[^\n]", key);
+getchar();
+printf("decrypted text: ");
+for(int i=0, j=0; i < strlen(ciphertext); i++, j++){
+if(j >= strlen(key)){
+j = 0;
+}
+int shift = toupper(key[j]) - 'A';
+char decryptChar = ((toupper(ciphertext[i]) - 'A' - shift + 26) % 26) + 'A';
+printf("%c", decryptChar);
+}
+printf("\n");
+}
+int main() {
+int option;
+while (1) {
+printf("\n1. Encrypt");
+printf("\n2. Decrypt");
+printf("\n3. Print Vigenère Table");
+printf("\n4. Exit\n");
+printf("\nEnter your option: ");
+scanf("%d", &option);
+switch (option) {
+case 1:
+encrypt();
+break;
+case 2:
+decrypt();
+break;
+case 3:
+printVigenereTable();
+break;
+case 4:
+exit(0);
+default:
+printf("\nInvalid selection! Try again.\n");
+break;
+}
+}
+return 0;
+}
